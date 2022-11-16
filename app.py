@@ -1,12 +1,11 @@
 
-from multiprocessing import reduction
 from flask import Flask, request
 
 app = Flask(__name__)
 
 stores = [
     {
-        'name':'my store',
+       'name':'my store',
         'items' : [
             {
                 'name':'chair',

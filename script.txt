@@ -1,0 +1,7 @@
+#! bin/bash
+rm logs.txt
+touch logs.txt
+docker stop udemy-tutorial-container >> logs.txt
+docker rm udemy-tutorial-container >> logs.txt
+docker build -t udemy-tutorial app/
+docker run --name udemy-tutorial-container udemy-tutorial >> logs.txt
