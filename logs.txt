@@ -1,0 +1,24 @@
+udemy-tutorial-container
+udemy-tutorial-container
+Sending build context to Docker daemon  6.144kB
+Step 1/6 : FROM python:slim-buster
+ ---> a082a6822907
+Step 2/6 : EXPOSE 5000
+ ---> Using cache
+ ---> 12d0e689f637
+Step 3/6 : WORKDIR /app
+ ---> Using cache
+ ---> 7dfa5369920e
+Step 4/6 : COPY . .
+ ---> Using cache
+ ---> 13d3e7c5763c
+Step 5/6 : RUN pip install -r requirements.txt
+ ---> Using cache
+ ---> 6bafaadfb409
+Step 6/6 : CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+ ---> Using cache
+ ---> dce7a1861e7b
+Successfully built dce7a1861e7b
+Successfully tagged udemy-tutorial:latest
+ * Serving Flask app 'app'
+ * Debug mode: on
