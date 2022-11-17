@@ -2,3 +2,5 @@
 .vscode/*
 __pycache__/*
 logs.txt
+*/__pycache__/*
+app/resources/
