@@ -1,2 +1,4 @@
 stores = {}
 items = {}
+
+print(stores)
