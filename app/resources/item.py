@@ -3,32 +3,26 @@ import uuid
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
+from app.schemas import ItemSchema, ItemUpdateSchema
 from db import items,stores
 
 
-blp = Blueprint("items", __name__, description="Opertation on items")
+blp = Blueprint("Items", __name__, description="Opertation on items")
 
 
 @blp.route("/item/<string:item_id>")
 class Item(MethodView):
+
+    @blp.response(200,ItemSchema)
     def get(self, item_id):
         try:
             return items[item_id]
         except KeyError:
             abort (404, message = "Item not found")
     
-    def put(self, item_id):
-        item_data = request.get_json()
-
-        if(
-            'price' not in item_data or
-            'store_id' not in item_data or
-            'name' not in item_data
-        ):
-            abort(
-                400,
-                message="Bad request ensure 'price', 'store_id' and 'name' are provided"
-            )
+    @blp.arguments(ItemUpdateSchema)
+    @blp.response(200, ItemSchema)
+    def put(self, item_data, item_id):
 
         try:
             item = items[item_id]
@@ -51,23 +45,17 @@ class Item(MethodView):
 @blp.route("/item")
 class ItemList(MethodView):
 
+    @blp.response(200, ItemSchema(many=True))   # converts dictionary to a list
     def get(self):
-        return {"items" : list(items.values())}
+        return items.values()
     
-    
-    def post(self):
-        item_data = request.get_json()
+    # to apply schemna
+    @blp.arguments(ItemSchema)
+    @blp.response(200, ItemSchema)
+    def post(self,item_data):             # item_data is obtained through schema (decorator) and it return a dictionart of validated data
+        # item_data = request.get_json()  # no need as obtained through decorator
 
-        if(
-            'price' not in item_data or
-            'store_id' not in item_data or
-            'name' not in item_data
-        ):
-            abort(
-                400,
-                message=f"Bad request ensure 'price', 'store_id' and 'name' are provided"
-            )
-
+        # checks wether item already exists
         for item in items.values():
             if(
                 item_data['name'] == item['name'] and
