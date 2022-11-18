@@ -1,5 +1,6 @@
 .venv/*
 .vscode/*
-__pycache__/*
+__pycache__/
 logs.txt
-*/__pycache__/*
+app/resources/__pycache__/
+app/__pycache__/
