@@ -1,6 +1,8 @@
-.venv/*
-.vscode/*
-__pycache__/
+.venv
+.vscode
+__pycache__
 logs.txt
 app/resources/__pycache__/
 app/__pycache__/
+.venv2
+hello.py
