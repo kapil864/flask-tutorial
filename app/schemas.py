@@ -5,7 +5,7 @@ from marshmallow import Schema,fields
 
 # Schema to be followed when inserting item (item post request)
 class PlainItemSchema(Schema):
-    id = fields.Str(dump_only=True)     # use only for returning data  # cannot be sent through api post request
+    id = fields.Int(dump_only=True)     # use only for returning data  # cannot be sent through api post request
     name = fields.Str(required=True)        # name should be a string
     price = fields.Float(required=True)     # price should be a float
 
@@ -19,7 +19,11 @@ class ItemUpdateSchema(Schema):
 
 # schema to be followed when inserting store (post request)
 class PlainStoreSchema(Schema):
-    id = fields.Str(dump_only=True)
+    id = fields.Int(dump_only=True)
+    name = fields.Str(required=True)
+
+class PlainTagSchema(Schema):
+    id = fields.Int(dump_only=True)
     name = fields.Str(required=True)
 
 class ItemSchema(PlainItemSchema):
@@ -27,5 +31,9 @@ class ItemSchema(PlainItemSchema):
     store = fields.Nested(PlainStoreSchema(), dump_only = True)     # used whenr sending data to client
 
 class StoreSchema(PlainStoreSchema):
-    items = fields.List(fields.Nested(ItemSchema()),dump_only=True)
+    items = fields.List(fields.Nested(PlainItemSchema()),dump_only=True)
+    tags = fields.List(fields.Nested(PlainTagSchema()),dump_only=True)
 
+class TagSchema(PlainTagSchema):
+    store_id = fields.Int(load_only= True)
+    store = fields.Nested(PlainStoreSchema(), dump_only=True)
