@@ -4,13 +4,14 @@ import secrets
 
 from flask import Flask, jsonify
 from flask_smorest import Api
+
+from app.blocklist import BLOCKLIST
 from app.resources.item import blp as ItemBlueprint
 from app.resources.store import blp as StoreBlueprint
 from app.resources.tag import blp as TagBlueprint
 from app.resources.user import blp as UserBlueprint
 from app.db import db
-from app.models.item import ItemModel
-from app.models.store import StoreModel
+
 
 from flask_jwt_extended import JWTManager
 
@@ -37,6 +38,20 @@ def create_app(db_url = None):
     app.config['JWT_SECRET_KEY'] = "195060783362593048056456918259598665565"
     jwt = JWTManager(app)
 
+    # add token in block list
+    @jwt.token_in_blocklist_loader
+    def checks_if_token_in_blocklist(jwt_header, jwt_payload):
+        return jwt_payload["jti"] in BLOCKLIST
+
+    # return error message when revoked token is used
+    @jwt.revoked_token_loader
+    def revoked_token_callback(jwt_header, jwt_payload):
+        return (
+            jsonify(
+                {"desciption":"Token has been revoked", "error":"token_revoked"}
+            ),
+            401
+        )
     
     # add claims to a jwt token/ more inforamtion for an api
     @jwt.additional_claims_loader
