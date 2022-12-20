@@ -2,7 +2,7 @@
 import os
 import secrets
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_smorest import Api
 from app.resources.item import blp as ItemBlueprint
 from app.resources.store import blp as StoreBlueprint
@@ -36,6 +36,43 @@ def create_app(db_url = None):
     # app.config['JWT_EXTENDED_KEY'] = "test"
     app.config['JWT_SECRET_KEY'] = "195060783362593048056456918259598665565"
     jwt = JWTManager(app)
+
+    
+    # add claims to a jwt token/ more inforamtion for an api
+    @jwt.additional_claims_loader
+    def add_claims_to_jwt(identity):
+
+        # look in databse see weather user is admin or not
+        if identity == 1:
+            return {"is_admin":True}
+        return {"is_admin":False}
+
+
+    # called when token is invalid
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error):
+        return(
+            jsonify({"message": "Signature verification failed", "error": "invalid_token"}),
+            401
+        )
+
+    # called when token is expired
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        return(
+            jsonify({"message": "The token has expired", "error": "expired_token"}),
+            401
+        )
+
+    # called when token is missing
+    @jwt.unauthorized_loader
+    def expired_token_callback(error):
+        return(
+            jsonify({"description": "Request does not contain an access token", "error": "authorization_required"}),
+            401
+        )
+
+    
 
     with app.app_context():
         db.create_all()

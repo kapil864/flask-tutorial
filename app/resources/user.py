@@ -3,7 +3,6 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import create_access_token
-from app.app import jwt
 
 from app.db  import db
 from app.models.user import UserModel
