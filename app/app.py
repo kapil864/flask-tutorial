@@ -32,8 +32,9 @@ def create_app(db_url = None):
     api = Api(app)
 
     # used for signing the jwt
+    # JWT extended is not working. or may be depricated
     # app.config['JWT_EXTENDED_KEY'] = "test"
-    app.config['JWT_EXTENDED_KEY'] = "195060783362593048056456918259598665565"
+    app.config['JWT_SECRET_KEY'] = "195060783362593048056456918259598665565"
     jwt = JWTManager(app)
 
     with app.app_context():
