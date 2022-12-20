@@ -8,9 +8,9 @@ from app.models.store import StoreModel
 from app.db import db
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
-blp = Blueprint("Tags", __name__, description = "Operations on Tags")
+blp = Blueprint("Tags", 'tags', description = "Operations on Tags")
 
-@blp.route("/store/<string:store_id>/tag")
+@blp.route("/store/<int:store_id>/tag")
 class TagInStore(MethodView):
 
     @blp.response(200, TagSchema(many=True))
@@ -36,7 +36,7 @@ class TagInStore(MethodView):
 
         return tag
 
-@blp("/item/<string:item_id>/tag/<string:tag_id>")
+@blp.route("/item/<int:item_id>/tag/<int:tag_id>")
 class LinkTagsToItem(MethodView):
 
     @blp.response(201, TagSchema)
@@ -74,7 +74,7 @@ class LinkTagsToItem(MethodView):
 
 
 
-@blp.route("/tag/<string:tag_id>")
+@blp.route("/tag/<int:tag_id>")
 class Tag(MethodView):
 
     @blp.response(200, TagSchema)

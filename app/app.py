@@ -1,13 +1,18 @@
 
 import os
+import secrets
+
 from flask import Flask
 from flask_smorest import Api
 from app.resources.item import blp as ItemBlueprint
 from app.resources.store import blp as StoreBlueprint
 from app.resources.tag import blp as TagBlueprint
+from app.resources.user import blp as UserBlueprint
 from app.db import db
 from app.models.item import ItemModel
 from app.models.store import StoreModel
+
+from flask_jwt_extended import JWTManager
 
 
 def create_app(db_url = None):
@@ -26,11 +31,17 @@ def create_app(db_url = None):
     db.init_app(app)
     api = Api(app)
 
+    # used for signing the jwt
+    # app.config['JWT_EXTENDED_KEY'] = "test"
+    app.config['JWT_EXTENDED_KEY'] = "195060783362593048056456918259598665565"
+    jwt = JWTManager(app)
+
     with app.app_context():
         db.create_all()
 
     api.register_blueprint(ItemBlueprint)
     api.register_blueprint(StoreBlueprint)
     api.register_blueprint(TagBlueprint)
+    api.register_blueprint(UserBlueprint)
 
     return app

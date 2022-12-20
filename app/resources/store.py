@@ -11,7 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 # used to divide an api into multiple segments
 blp = Blueprint("stores", __name__, description="Operation on stores")
 
-@blp.route("/store/<string:store_id>")
+@blp.route("/store/<int:store_id>")
 class Store(MethodView):
     
     @blp.response(200, StoreSchema)
