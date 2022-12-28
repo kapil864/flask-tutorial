@@ -1,9 +1,9 @@
 
 import os
 
-
 from flask import Flask, jsonify
 from flask_smorest import Api
+from flask_migrate import Migrate
 
 from app.blocklist import BLOCKLIST
 from app.resources.item import blp as ItemBlueprint
@@ -30,6 +30,9 @@ def create_app(db_url = None):
     app.config["SQLALCHEMT_TRACK_MODIFICATION"] = False
 
     db.init_app(app)
+
+    migrate = Migrate(app,db)
+
     api = Api(app)
 
     # used for signing the jwt
@@ -99,9 +102,9 @@ def create_app(db_url = None):
         }
 
     
-
-    with app.app_context():
-        db.create_all()
+    # not needed since flask-migrate will create database tables
+    # with app.app_context():
+    #     db.create_all()
 
     api.register_blueprint(ItemBlueprint)
     api.register_blueprint(StoreBlueprint)

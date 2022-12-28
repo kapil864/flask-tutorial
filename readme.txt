@@ -14,3 +14,9 @@ def post/get/put ;;;; method to apply schema to
 
 @blp.response(200, ItemSchema(many=True))   # converts dictionary to a list
     def get(self):
+
+flask-migration
+
+- flask db inint - to create  flask migrations/ inintillize flask migrate
+- flask db migrate - create a migration/create tables
+- flask db upgrade = apply the upgrade

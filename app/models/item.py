@@ -8,6 +8,7 @@ class ItemModel(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String, unique = True, nullable = False)
+    description = db.Column(db.String)
     price = db.Column(db.Float(precision = 2), unique = False, nullable = False)
     store_id = db.Column(db.Integer,db.ForeignKey("stores.id"), unique = False, nullable = False) # mapes to table stores and coulmn id
     store = db.relationship("StoreModel", back_populates="items")
