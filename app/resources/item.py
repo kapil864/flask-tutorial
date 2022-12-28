@@ -66,8 +66,8 @@ class ItemList(MethodView):
     def get(self):
         return ItemModel.query.all()
 
-
-    @jwt_required() # proteect endpoint by requring a jwt
+    # need a frest token
+    @jwt_required(fresh=True) # proteect endpoint by requring a jwt
     # to apply schemna
     @blp.arguments(ItemSchema)
     @blp.response(200, ItemSchema)
